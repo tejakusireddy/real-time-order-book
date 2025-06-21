@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><title>WS Test</title></head>
+<body>
+<h1>WebSocket Order Book Test</h1>
+<script>
+  const ws = new WebSocket("ws://localhost:8080/ws");
+
+  ws.onopen = () => {
+    console.log("✅ Connected to WS");
+
+    // Submit a new order
+    const order = {
+      type: "new_order",
+      payload: {
+        id: "order-123",
+        price: 101.5,
+        quantity: 1.0,
+        type: "limit",
+        side: "buy"
+      }
+    };
+
+    ws.send(JSON.stringify(order));
+    console.log("📤 Order sent");
+  };
+
+  ws.onmessage = (e) => {
+    console.log("📨 Message from server:", e.data);
+  };
+
+  ws.onerror = (e) => {
+    console.error("❌ Error:", e);
+  };
+
+  ws.onclose = () => {
+    console.log("🔌 Disconnected");
+  };
+</script>
+</body>
+</html>
